@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f7a4d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Class Tap">
+<title>Class Tap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f6f3;--card:#fff;--ink:#14211b;--mute:#5d6b63;--line:#d9e2dc;--ok:#1f7a4d;--bad:#b4381c;--skip:#6b7280;--okbg:#dff3e7;--badbg:#fbe3dc;--skipbg:#e7e9ec;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1713;--card:#18231d;--ink:#e8f0ea;--mute:#9bab9f;--line:#2a3a31;--ok:#5fd199;--bad:#ff8a6b;--skip:#a3acb8;--okbg:#17382a;--badbg:#3d211a;--skipbg:#2a2f36}}
+:root[data-theme="dark"]{--bg:#0f1713;--card:#18231d;--ink:#e8f0ea;--mute:#9bab9f;--line:#2a3a31;--ok:#5fd199;--bad:#ff8a6b;--skip:#a3acb8;--okbg:#17382a;--badbg:#3d211a;--skipbg:#2a2f36}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.4}
+main{max-width:520px;margin:0 auto;padding:16px 16px 40px}
+h1{font-size:1.5rem;margin:4px 0 12px;letter-spacing:-.02em}
+h2{font-size:1.05rem;margin:22px 0 6px}
+select,input[type=date],textarea{width:100%;padding:12px;font:inherit;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+textarea{min-height:90px;font-size:.8rem;word-break:break-all}
+.tabs{display:flex;gap:6px;margin:14px 0}
+.tabs button{flex:1;padding:10px 4px;font:inherit;font-weight:600;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--mute)}
+.tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.date{display:flex;align-items:center;justify-content:space-between;margin:6px 0 10px}
+.date b{font-size:1.1rem}
+.date button{width:44px;height:44px;font-size:1.3rem;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+.jump{display:flex;gap:8px;margin-bottom:10px}
+.jump button{flex:none;padding:0 16px}
+.ghost{width:100%;padding:12px;font:inherit;font-weight:600;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:10px;margin-bottom:12px}
+.ghost.on{background:var(--skipbg);border-color:var(--skip);color:var(--skip)}
+.jump .ghost{margin:0;width:auto}
+.slot{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+.slot .t,.info .t{color:var(--mute);font-size:.85rem}
+.slot .s{font-weight:700;font-size:1.05rem;margin:2px 0 10px}
+.btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.btns button{padding:12px 4px;font:inherit;font-weight:600;border:1.5px solid var(--line);border-radius:10px;background:transparent;color:var(--ink)}
+.btns .p.on{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.btns .a.on{background:var(--badbg);border-color:var(--bad);color:var(--bad)}
+.btns .n.on{background:var(--skipbg);border-color:var(--skip);color:var(--skip)}
+.empty{color:var(--mute);padding:24px 8px;text-align:center}
+.info{border:1px dashed var(--line);border-radius:12px;padding:10px 12px;margin-bottom:10px;color:var(--mute)}
+.info b{display:block;color:var(--ink)}
+.sub{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+.sub .r{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sub .r b{font-size:1.02rem}
+.pct{font-weight:700;font-size:1.2rem}
+.grp{font-weight:700;font-size:1.05rem;margin:18px 0 8px}
+.bar{height:8px;background:var(--line);border-radius:4px;margin:8px 0;position:relative;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok)}
+.bar.low i{background:var(--bad)}
+.bar:after{content:"";position:absolute;left:75%;top:0;bottom:0;width:2px;background:var(--ink);opacity:.5}
+.msg{font-size:.88rem;color:var(--mute)}
+.msg.low{color:var(--bad);font-weight:600}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.two .ghost{margin:0}
+.danger{color:var(--bad)}
+.note{font-size:.85rem;color:var(--mute);margin:6px 0}
+.help{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:.92rem}
+.help p{margin:0 0 8px}
+.help p:last-child{margin:0}
+</style>
+</head>
+<body>
+<main>
+<h1>Class Tap</h1>
+<select id="batch" aria-label="Choose your batch"></select>
+<div class="tabs">
+<button id="tToday" class="on">Today</button>
+<button id="tSum">Attendance</button>
+<button id="tMore">More</button>
+</div>
+
+<section id="vToday">
+<div class="date"><button id="prev" aria-label="Previous day">‹</button><b id="dlabel"></b><button id="next" aria-label="Next day">›</button></div>
+<div class="jump"><input type="date" id="dpick" aria-label="Jump to a date"><button class="ghost" id="tod">Today</button></div>
+<button class="ghost" id="hol"></button>
+<div id="slots"></div>
+</section>
+
+<section id="vSum" hidden>
+<div id="subs"></div>
+<p class="note">Saved only on this phone. The line on each bar marks 75%. Holidays and “No class” are not counted.</p>
+</section>
+
+<section id="vMore" hidden>
+<h2>Back up your attendance</h2>
+<p class="note">Your data lives only in this browser. Clearing browser data or changing phones erases it. Make a backup code and keep it in WhatsApp (message yourself) or Notes.</p>
+<textarea id="code" placeholder="Backup code appears here. To restore, paste a code here." aria-label="Backup code"></textarea>
+<div class="two"><button class="ghost" id="bk">Make backup code</button><button class="ghost" id="rs">Restore from code</button></div>
+<p class="note" id="bmsg"></p>
+
+<h2>Add to home screen</h2>
+<div class="help">
+<p><b>Android (Chrome):</b> tap the ⋮ menu, then “Add to Home screen” or “Install app”.</p>
+<p><b>iPhone (Safari):</b> tap the Share button, then “Add to Home Screen”.</p>
+<p>It opens from your home screen like an app. It still needs internet to load.</p>
+</div>
+
+<h2>Start over</h2>
+<button class="ghost danger" id="reset">Clear all my attendance</button>
+</section>
+</main>
+<script>
+// Day numbers: 1 = Mon ... 6 = Sat. A third value "i" marks a class that is not tracked.
+var A1 = "AGRO-201 Crop Production Technology-I", AE = "AECO-241 Agricultural Economics", PA = "PATH-271 Nematology", GE = "GPBR-211 Genetics", PH = "PHED-201 Physical Education, First Aid, Yoga";
+var T1 = "9:00 – 11:00 AM", T2 = "11:00 AM – 12:00 PM", T3 = "12:00 – 1:00 PM", T4 = "2:00 – 4:00 PM";
+var TT = {
+  "F Batch": {
+    1: [[T1,AE+" (Practical)"],[T2,AE+" (Theory)"],[T3,PA+" (Theory)"],[T4,"HORT-281 Vegetables & Spices (Practical)"]],
+    2: [[T1,"SKEC-201 Mushroom Production Technology (Practical)"],[T3,GE+" (Theory)"],[T4,PH+" (Practical)"]],
+    3: [[T1,A1+" (Practical)"],[T2,A1+" (Theory)"],[T3,GE+" (Theory)"],[T4,"AGRO-202 Natural Farming (Practical)"]],
+    4: [[T1,"SKEC-201 Mushroom Production Technology (Practical)"],[T2,AE+" (Theory)"],[T3,"AEXT-291 Extension Education (Theory)"],[T4,A1+" (Practical)"]],
+    5: [[T1,PA+" (Practical)"],[T2,"AGRO-202 Natural Farming (Theory)"],[T3,"HORT-281 Vegetables & Spices (Theory)"],[T4,PH+" (Practical)"]],
+    6: [[T1,GE+" (Practical)"],[T2,"Advisory Class","i"],[T3,"Club / NSS Activities","i"],[T4,"AEXT-291 Extension Education (Practical)"]]
+  }
+};
+var KEY = "classtap-v1";
+var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+var store = {batch: Object.keys(TT)[0], att: {}, hol: {}};
+try { var raw = localStorage.getItem(KEY); if (raw) { var o = JSON.parse(raw); if (o && o.att) store = o; } } catch (e) {}
+store.hol = store.hol || {};
+if (!TT[store.batch]) store.batch = Object.keys(TT)[0];
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+function $(id){ return document.getElementById(id); }
+function dstr(d){ return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate(); }
+function ival(d){ return d.getFullYear() + "-" + ("0" + (d.getMonth()+1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+var cur = new Date();
+function getRec(date, i){ var b = store.att[store.batch]; return b && b[date] ? b[date][i] : undefined; }
+function setRec(date, i, v){
+  var b = store.att[store.batch] = store.att[store.batch] || {};
+  var d = b[date] = b[date] || {};
+  if (d[i] === v) delete d[i]; else d[i] = v;
+  save(); renderToday();
+}
+function renderToday(){
+  var dow = cur.getDay(), date = dstr(cur), list = TT[store.batch][dow] || [], h = "";
+  var isHol = !!store.hol[date];
+  $("dlabel").textContent = days[dow] + ", " + cur.getDate() + "/" + (cur.getMonth()+1) + "/" + cur.getFullYear();
+  $("dpick").value = ival(cur);
+  var hb = $("hol");
+  hb.hidden = !list.length;
+  hb.textContent = isHol ? "Holiday. Tap to undo" : "Mark this day as a holiday";
+  hb.className = "ghost" + (isHol ? " on" : "");
+  if (!list.length) h = '<div class="empty">No classes on ' + days[dow] + '.</div>';
+  else if (isHol) h = '<div class="empty">Holiday. Nothing from this day is counted.</div>';
+  else list.forEach(function(s, i){
+    if (s[2]) { h += '<div class="info"><span class="t">' + s[0] + '</span><b>' + s[1] + '</b>Not counted in attendance</div>'; return; }
+    var r = getRec(date, i);
+    h += '<div class="slot"><div class="t">' + s[0] + '</div><div class="s">' + s[1] + '</div><div class="btns">' +
+      '<button class="p' + (r==="p"?" on":"") + '" data-i="' + i + '" data-v="p">Present</button>' +
+      '<button class="a' + (r==="a"?" on":"") + '" data-i="' + i + '" data-v="a">Absent</button>' +
+      '<button class="n' + (r==="n"?" on":"") + '" data-i="' + i + '" data-v="n">No class</button></div></div>';
+  });
+  $("slots").innerHTML = h;
+}
+function renderSum(){
+  var tt = TT[store.batch], recs = store.att[store.batch] || {}, stats = {};
+  Object.keys(tt).forEach(function(d){ tt[d].forEach(function(s){ if (!s[2]) stats[s[1]] = stats[s[1]] || {a:0,t:0}; }); });
+  Object.keys(recs).forEach(function(date){
+    if (store.hol[date]) return;
+    var p = date.split("-"), dow = new Date(+p[0], +p[1]-1, +p[2]).getDay();
+    Object.keys(recs[date]).forEach(function(i){
+      var slot = (tt[dow] || [])[i]; if (!slot || slot[2]) return;
+      var v = recs[date][i], st = stats[slot[1]];
+      if (v === "p") { st.a++; st.t++; } else if (v === "a") { st.t++; }
+    });
+  });
+  var info = {}, order = [], names = [], heads = {}, h = "";
+  Object.keys(stats).forEach(function(n){
+    var m = n.match(/^(.*) \((Practical|Theory)\)$/), base = m ? m[1] : n;
+    if (!info[base]) { info[base] = {P: null, T: null, x: order.length}; order.push(base); }
+    if (m && m[2] === "Practical") info[base].P = n; else info[base].T = n;
+  });
+  function rank(b){ return info[b].P && info[b].T ? 0 : info[b].P ? 1 : 2; }
+  order.sort(function(a, b){ return rank(a) - rank(b) || info[a].x - info[b].x; });
+  order.forEach(function(b){
+    [[info[b].P, "Practical"], [info[b].T, "Theory"]].forEach(function(p){
+      if (p[0]) { heads[p[0]] = {base: b, kind: p[1], first: !names.some(function(x){ return heads[x].base === b; })}; names.push(p[0]); }
+    });
+  });
+  names.forEach(function(name){
+    var st = stats[name], a = st.a, t = st.t, msg, low = false, pct = "–", w = 0;
+    if (t) {
+      pct = Math.round(a / t * 100) + "%"; w = a / t * 100; low = a / t < 0.75;
+      if (!low) { var skip = Math.floor(a / 0.75 - t); msg = "You can skip " + skip + " more class" + (skip === 1 ? "" : "es") + " and stay at 75%."; }
+      else { var need = Math.ceil(3 * t - 4 * a); msg = "Attend the next " + need + " class" + (need === 1 ? "" : "es") + " in a row to reach 75%."; }
+    } else msg = "No classes marked yet.";
+    h += (heads[name].first ? '<div class="grp">' + heads[name].base + '</div>' : '') + '<div class="sub"><div class="r"><b>' + heads[name].kind + '</b><span class="pct">' + pct + '</span></div>' +
+      '<div class="bar' + (low ? " low" : "") + '"><i style="width:' + w + '%"></i></div>' +
+      '<div class="msg' + (low ? " low" : "") + '">' + a + ' of ' + t + ' attended. ' + msg + '</div></div>';
+  });
+  $("subs").innerHTML = h;
+}
+function show(tab){
+  var m = {today: ["vToday","tToday"], sum: ["vSum","tSum"], more: ["vMore","tMore"]};
+  Object.keys(m).forEach(function(k){ $(m[k][0]).hidden = k !== tab; $(m[k][1]).className = k === tab ? "on" : ""; });
+  if (tab === "sum") renderSum(); else if (tab === "today") renderToday();
+}
+var sel = $("batch");
+Object.keys(TT).forEach(function(b){ var o = document.createElement("option"); o.value = b; o.textContent = b; sel.appendChild(o); });
+sel.value = store.batch;
+sel.onchange = function(){ store.batch = sel.value; save(); show("today"); };
+$("tToday").onclick = function(){ show("today"); };
+$("tSum").onclick = function(){ show("sum"); };
+$("tMore").onclick = function(){ show("more"); };
+$("prev").onclick = function(){ cur.setDate(cur.getDate() - 1); renderToday(); };
+$("next").onclick = function(){ cur.setDate(cur.getDate() + 1); renderToday(); };
+$("tod").onclick = function(){ cur = new Date(); renderToday(); };
+$("dpick").onchange = function(){ var v = this.value; if (!v) return; var p = v.split("-"); cur = new Date(+p[0], +p[1]-1, +p[2]); renderToday(); };
+$("hol").onclick = function(){ var d = dstr(cur); if (store.hol[d]) delete store.hol[d]; else store.hol[d] = true; save(); renderToday(); };
+$("slots").onclick = function(e){ var b = e.target.closest("button"); if (b) setRec(dstr(cur), b.dataset.i, b.dataset.v); };
+$("bk").onclick = function(){
+  var code = "CLASSTAP1:" + btoa(unescape(encodeURIComponent(JSON.stringify(store))));
+  var box = $("code"), msg = $("bmsg");
+  box.value = code; box.select();
+  var manual = "Select the code above and copy it, then save it somewhere safe.";
+  try { navigator.clipboard.writeText(code).then(function(){ msg.textContent = "Copied. Paste it into WhatsApp (message yourself) or Notes."; }, function(){ msg.textContent = manual; }); }
+  catch (e) { msg.textContent = manual; }
+};
+$("rs").onclick = function(){
+  var t = $("code").value.trim(), msg = $("bmsg");
+  if (t.indexOf("CLASSTAP1:") !== 0) { msg.textContent = "That is not a valid backup code."; return; }
+  try {
+    var o = JSON.parse(decodeURIComponent(escape(atob(t.slice(10)))));
+    if (!o || typeof o.att !== "object") throw 0;
+    if (!confirm("Replace the attendance on this phone with this backup?")) return;
+    o.hol = o.hol || {}; if (!TT[o.batch]) o.batch = Object.keys(TT)[0];
+    store = o; save(); sel.value = store.batch; msg.textContent = "Restored.";
+  } catch (e) { msg.textContent = "That backup code is damaged or incomplete."; }
+};
+$("reset").onclick = function(){ if (confirm("Delete all attendance saved on this phone?")) { store.att = {}; store.hol = {}; save(); $("bmsg").textContent = "Cleared."; } };
+show("today");
+</script>
+</body>
+</html>
